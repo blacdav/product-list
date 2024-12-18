@@ -1,8 +1,4 @@
-import { createContext, ReactNode, useContext, useReducer } from "react";
-
-interface Children {
-    children: ReactNode
-}
+import { createContext, useContext, useReducer } from "react";
 
 // interface Image {
 //     thumbnail: string,
@@ -36,19 +32,19 @@ const ACTIONS = {
     REMOVE: 'REMOVE'
 }
 
-const cartReducer = (state: CartList[], action: Action) => {
+const cartReducer = (state: CartList[], action: Action): CartList[] => {
     switch (action.type) {
         case ACTIONS.ADD:
             return [...state, action.payload]
         case ACTIONS.REMOVE:
-            return [state.filter((p) => p !== action.payload)]
+            return state.filter((p) => p !== action.payload)
         default:
-            break;
+            return state;
     }
 }
 
 const cartList: CartList[] = []
-export const CartProvider = ({ children }: Children) => {
+export const CartProvider: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, cartList);
 
     const addItem = (item: CartList) => {

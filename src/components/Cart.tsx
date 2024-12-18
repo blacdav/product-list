@@ -8,7 +8,7 @@ const Cart = () => {
       <section className='mt-5 grid gap-3'>
         <div className='grid gap-5'>
           {
-            Array(5).map((_, i) => {
+            Array(5).map((_, i) => (
               <div key={i} className='flex justify-between items-center'>
                 <div className=''>
                   <p className='font-bold'>1</p>
@@ -20,7 +20,7 @@ const Cart = () => {
                 </div>
                 <img src={remove} alt="remove icon" />
               </div>
-            })
+            ))
           }
 
           <div className='flex justify-between items-center'>
