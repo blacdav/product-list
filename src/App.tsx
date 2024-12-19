@@ -23,7 +23,7 @@ const App = () => {
   const [data, setData] = useState<Dessert[]>([]);
   useEffect(() => {
     const getData = async () => {
-      const response = await fetch('http://localhost:5173/data.json');
+      const response = await fetch('https://blacdav-product-list.netlify.app/');
       const data = await response.json();
       setData(data);
     }
