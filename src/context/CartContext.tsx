@@ -2,8 +2,8 @@ import { createContext, useContext, useReducer, useState } from "react";
 
 interface CartList {
     name: string,
-    price: number,
-    category: string,
+    price?: number,
+    category?: string,
 }
 
 interface Action {
@@ -12,7 +12,7 @@ interface Action {
 }
 
 interface CartContextType {
-    state: CartList,
+    state: CartList[],
     added: number,
     setAdded: (added: number) => void,
     addItem: (item: CartList, i: number) => void,
@@ -29,7 +29,7 @@ const ACTIONS = {
 const cartReducer = (state: CartList[], action: Action): CartList[] => {
     switch (action.type) {
         case ACTIONS.ADD:
-            return [...state, action.payload]
+            return [action.payload, ...state]
         case ACTIONS.REMOVE:
             return state.filter((p) => p.name !== action.payload.name);
         default:
@@ -53,7 +53,7 @@ export const CartProvider: React.FC<React.PropsWithChildren<unknown>> = ({ child
     }
 
     return (
-        <CartContext.Provider value={{state, added, setAdded, addItem, removeItem}}>
+        <CartContext.Provider value={{ state, added, setAdded, addItem, removeItem }}>
             { children }
         </CartContext.Provider>
     )

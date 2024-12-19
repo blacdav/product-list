@@ -2,11 +2,11 @@ import remove from '../assets/icon-remove-item.svg'
 import carbon_neutral from '../assets/icon-carbon-neutral.svg'
 import { useCart } from '../context/CartContext';
 
-interface CartList {
-  name: string,
-  price: number,
-  category: string,
-}
+// interface CartList {
+//   name: string,
+//   price: number,
+//   category: string,
+// }
 
 const Cart = () => {
   const { state, removeItem } = useCart();
@@ -22,7 +22,7 @@ const Cart = () => {
                 <div className=''>
                   <p className='font-bold'>{item.name}</p>
                   <div className='flex items-baseline gap-2'>
-                    <p className='font-bold text-primary'>{item.length}</p>
+                    <p className='font-bold text-primary'>{}</p>
                     <small>@{item.price}</small>
                     <small>$</small>
                   </div>
