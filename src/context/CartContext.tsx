@@ -1,16 +1,8 @@
-import { createContext, useContext, useReducer } from "react";
-
-// interface Image {
-//     thumbnail: string,
-//     mobile: string,
-//     tablet: string,
-//     desktop: string,
-// }
+import { createContext, useContext, useReducer, useState } from "react";
 
 interface CartList {
     name: string,
     price: number,
-    // image: Image,
     category: string,
 }
 
@@ -20,9 +12,11 @@ interface Action {
 }
 
 interface CartContextType {
-    state: CartList[],
-    addItem: (item: CartList) => void,
-    removeItem: (item: CartList) => void
+    state: CartList,
+    added: number,
+    setAdded: (added: number) => void,
+    addItem: (item: CartList, i: number) => void,
+    removeItem: (name: string) => void
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -37,31 +31,38 @@ const cartReducer = (state: CartList[], action: Action): CartList[] => {
         case ACTIONS.ADD:
             return [...state, action.payload]
         case ACTIONS.REMOVE:
-            return state.filter((p) => p !== action.payload)
+            return state.filter((p) => p.name !== action.payload.name);
         default:
             return state;
     }
 }
 
 const cartList: CartList[] = []
+
 export const CartProvider: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, cartList);
+    const [added, setAdded] = useState<number>(-1)
 
-    const addItem = (item: CartList) => {
+    const addItem = (item: CartList, i: number) => {
         dispatch({type: ACTIONS.ADD, payload: item});
+        setAdded(i)
     }
 
-    const removeItem = (item: CartList) => {
-        dispatch({type: ACTIONS.REMOVE, payload: item});
+    const removeItem = (name: string) => {
+        dispatch({type: ACTIONS.REMOVE, payload: name});
     }
 
     return (
-        <CartContext.Provider value={{state, addItem, removeItem}}>
+        <CartContext.Provider value={{state, added, setAdded, addItem, removeItem}}>
             { children }
         </CartContext.Provider>
     )
 }
 
-export const useCart = () => {
-    return useContext(CartContext)
+export const useCart = (): CartContextType => {
+    const context = useContext(CartContext);
+    if (!context) {
+        throw new Error("useCart must be used within a CartProvider");
+    }
+    return context;
 }

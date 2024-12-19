@@ -1,24 +1,35 @@
 import remove from '../assets/icon-remove-item.svg'
 import carbon_neutral from '../assets/icon-carbon-neutral.svg'
+import { useCart } from '../context/CartContext';
+
+interface CartList {
+  name: string,
+  price: number,
+  category: string,
+}
 
 const Cart = () => {
+  const { state, removeItem } = useCart();
+
   return (
     <aside className='col-span-2 md:col-span-1 md:mt-5'>
-      <h1 className='font-bold text-xl text-primary'>Your Cart(7)</h1>
-      <section className='mt-5 grid gap-3'>
+      <h1 className='font-bold text-xl text-primary'>Your Cart({state.length})</h1>
+      <section className={`${state ? 'grid' : 'hidden'} mt-5 gap-3`}>
         <div className='grid gap-5'>
           {
-            Array(5).map((_, i) => (
+            state.map((item, i) => (
               <div key={i} className='flex justify-between items-center'>
                 <div className=''>
-                  <p className='font-bold'>1</p>
-                  <div className='flex gap-2'>
-                    <p className='font-bold text-primary'>2x</p>
-                    <p>@</p>
-                    <p>$</p>
+                  <p className='font-bold'>{item.name}</p>
+                  <div className='flex items-baseline gap-2'>
+                    <p className='font-bold text-primary'>{item.length}</p>
+                    <small>@{item.price}</small>
+                    <small>$</small>
                   </div>
                 </div>
-                <img src={remove} alt="remove icon" />
+                <div onClick={() => removeItem(item.name)} className='border-2 border-white rounded-full p-1 hover:cursor-pointer'>
+                  <img src={remove} alt="remove icon" />
+                </div>
               </div>
             ))
           }
