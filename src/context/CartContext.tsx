@@ -49,7 +49,7 @@ export const CartProvider: React.FC<React.PropsWithChildren<unknown>> = ({ child
     }
 
     const removeItem = (name: string) => {
-        dispatch({type: ACTIONS.REMOVE, payload: name});
+        dispatch({type: ACTIONS.REMOVE, payload: { name }});
     }
 
     return (
