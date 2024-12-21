@@ -19,11 +19,11 @@ interface Dessert {
   category: string,
 }
 const App = () => {
-  const { added, addItem } = useCart()
+  const { added, addItem, increaseQuantity } = useCart()
   const [data, setData] = useState<Dessert[]>([]);
   useEffect(() => {
     const getData = async () => {
-      const response = await fetch('https://blacdav-product-list.netlify.app/');
+      const response = await fetch('http://localhost:5173/data.json');
       const data = await response.json();
       setData(data);
     }
@@ -48,7 +48,7 @@ const App = () => {
                 <button className={`${added === index ? 'flex' : 'hidden'} w-1/3 h-10 md:w-2/4 px-2 py-1 mx-auto -mt-5 text-white justify-between items-center bg-primary rounded-full`}>
                   <img src={decrease} alt="decrease icon" className="border-2 border-white rounded-full w-5 h-5 p-1 flex justify-center items-center" />
                   <div>{1}</div>
-                  <img onClick={() => addItem(dessert, index)} src={increase} alt="increase icon" className="border-2 border-white rounded-full w-5 h-5 p-1 flex justify-center items-center" />
+                  <img onClick={() => increaseQuantity(dessert.name)} src={increase} alt="increase icon" className="border-2 border-white rounded-full w-5 h-5 p-1 flex justify-center items-center" />
                 </button>
               </div>
               <div className="w-full">

@@ -11,6 +11,8 @@ import { useCart } from '../context/CartContext';
 const Cart = () => {
   const { state, removeItem } = useCart();
 
+  const totalPrice = state.reduce((total, item) => total + (item.price || 0), 0);
+
   return (
     <aside className='col-span-2 md:col-span-1 md:mt-5'>
       <h1 className='font-bold text-xl text-primary'>Your Cart({state.length})</h1>
@@ -22,7 +24,7 @@ const Cart = () => {
                 <div className=''>
                   <p className='font-bold'>{item.name}</p>
                   <div className='flex items-baseline gap-2'>
-                    <p className='font-bold text-primary'>{}</p>
+                    <p className='font-bold text-primary'>x{item.quantity}</p>
                     <small>@{item.price}</small>
                     <small>$</small>
                   </div>
@@ -36,7 +38,7 @@ const Cart = () => {
 
           <div className='flex justify-between items-center'>
             <p>Order Total</p>
-            <p className='font-bold text-lg'>$</p>
+            <p className='font-bold text-lg'>${totalPrice}</p>
           </div>
 
           <div className='flex justify-center items-center gap-1'>
