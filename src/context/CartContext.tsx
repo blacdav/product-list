@@ -20,6 +20,7 @@ interface CartContextType {
     addItem: (item: CartList, i: number) => void,
     removeItem: (name: string) => void
     increaseQuantity: (name: string) => void,
+    decreaseQuantity: (item: CartList, name: string) => void,
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -38,11 +39,17 @@ const cartReducer = (state: CartList[], action: Action): CartList[] => {
         case ACTIONS.REMOVE:
             return state.filter((s) => s.name !== action.payload.name);
         case ACTIONS.INCREASE:
-            return state.map(item =>
-                item.name === action.payload.name
-                    ? { ...item, quantity: item.quantity + 1 }
-                    : item
+            return state.map((item) => item.name === action.payload.name ? { ...item, quantity: (item.quantity || 0) + 1 } : item
             );
+        case ACTIONS.DECREASE:
+            return state
+                .map(item =>
+                    item.name === action.payload.name && (item.quantity || 0) > 1
+                        ? { ...item, quantity: (item.quantity || 0) - 1 }
+                        : item
+                )
+                .filter(item => (item.quantity || 0) > 0);
+
         default:
             return state;
     }
@@ -56,7 +63,10 @@ export const CartProvider: React.FC<React.PropsWithChildren<unknown>> = ({ child
 
     const addItem = (item: CartList, i: number) => {
         dispatch({type: ACTIONS.ADD, payload: item});
-        setAdded(i)
+        if (item.name) {
+            increaseQuantity(item.name);
+        }
+        setAdded(i);
     }
 
     const removeItem = (name: string) => {
@@ -67,8 +77,15 @@ export const CartProvider: React.FC<React.PropsWithChildren<unknown>> = ({ child
         dispatch({type: ACTIONS.INCREASE, payload: { name }});
     }
 
+    const decreaseQuantity = (item: CartList, name: string) => {
+        dispatch({type: ACTIONS.DECREASE, payload: { name }});
+        if(item.quantity == 1) {
+            removeItem(name);
+        }
+    }
+
     return (
-        <CartContext.Provider value={{ state, added, setAdded, addItem, removeItem, increaseQuantity }}>
+        <CartContext.Provider value={{ state, added, setAdded, addItem, removeItem, increaseQuantity, decreaseQuantity }}>
             { children }
         </CartContext.Provider>
     )
