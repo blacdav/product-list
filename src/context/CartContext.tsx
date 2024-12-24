@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useState } from "react";
+import { createContext, ReactNode, useContext, useReducer } from "react";
 
 interface CartList {
     name?: string,
@@ -9,18 +9,21 @@ interface CartList {
 
 interface Action {
     type: string,
-    payload: CartList
+    payload: CartList,
 }
 
 interface CartContextType {
     state: CartList[],
     // quantity: CartList[],
-    added: number,
-    setAdded: (added: number) => void,
-    addItem: (item: CartList, i: number) => void,
+    addItem: (item: CartList) => void,
     removeItem: (name: string) => void
     increaseQuantity: (name: string) => void,
     decreaseQuantity: (item: CartList, name: string) => void,
+    isInCart: (name: string) => boolean
+}
+
+interface CartNode {
+    children: ReactNode
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -57,17 +60,26 @@ const cartReducer = (state: CartList[], action: Action): CartList[] => {
 
 const cartList: CartList[] = []
 
-export const CartProvider: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
+export const CartProvider: React.FC<CartNode> = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, cartList);
-    const [added, setAdded] = useState<number>(-1)
+    // const [added, setAdded] = useState<number>(-1)
 
-    const addItem = (item: CartList, i: number) => {
-        dispatch({type: ACTIONS.ADD, payload: item});
-        if (item.name) {
-            increaseQuantity(item.name);
+    // const addItem = (item: CartList) => {
+    //     dispatch({type: ACTIONS.ADD, payload: item});
+    //     // if (item.name) {
+    //     //     increaseQuantity(item.name);
+    //     // }
+    //     // setAdded(i);
+    // }
+
+    const addItem = (item: CartList) => {
+        const existingItem = state.find((cartItem) => cartItem.name === item.name);
+        if (existingItem) {
+            dispatch({ type: ACTIONS.INCREASE, payload: { name: item.name } });
+        } else {
+            dispatch({ type: ACTIONS.ADD, payload: { ...item, quantity: 1 } });
         }
-        setAdded(i);
-    }
+    };
 
     const removeItem = (name: string) => {
         dispatch({type: ACTIONS.REMOVE, payload: { name }});
@@ -79,13 +91,17 @@ export const CartProvider: React.FC<React.PropsWithChildren<unknown>> = ({ child
 
     const decreaseQuantity = (item: CartList, name: string) => {
         dispatch({type: ACTIONS.DECREASE, payload: { name }});
-        if(item.quantity == 1) {
+        if(item.quantity === 2) {
             removeItem(name);
         }
     }
 
+    const isInCart = (name: string): boolean => {
+        return state.some(item => item.name === name);
+    };
+
     return (
-        <CartContext.Provider value={{ state, added, setAdded, addItem, removeItem, increaseQuantity, decreaseQuantity }}>
+        <CartContext.Provider value={{ state, addItem, removeItem, increaseQuantity, decreaseQuantity, isInCart }}>
             { children }
         </CartContext.Provider>
     )

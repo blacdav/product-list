@@ -18,7 +18,6 @@ const Cart: React.FC<ConfirmOrderState> = ({setIsConfirmed}) => {
   const { state, removeItem } = useCart();
 
   const totalPrice = state.reduce((total, item) => total + ((item.price || 1) * (item.quantity || 1)), 0);
-  // const itemPrice = state.filter((item) => item.name === .name ? total + ((item.price || 1) * (item.quantity || 1)), 0)
 
   return (
     <aside className='col-span-2 md:col-span-1 md:mt-5'>
