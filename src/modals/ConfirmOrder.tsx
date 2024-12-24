@@ -7,9 +7,18 @@ interface ConfirmOrderState {
 }
 
 const ConfirmOrder: React.FC<ConfirmOrderState> = ({isConfirmed, setIsConfirmed}) => {
-  const { state } = useCart();
+  const { state, reset } = useCart();
+  const totalPrice = state.reduce((total, item) => total + ((item.price || 1) * (item.quantity || 1)), 0);
+
+  const handleClose = () => {
+    // const elementId = document.getElementById('wrapper');
+    // if(elementId) {
+    //   setIsConfirmed(false);
+    // }
+  }
+
   return (
-    <section className={`${isConfirmed ? 'flex' : 'hidden'} inset-0 bg-black bg-opacity-75 fixed justify-center items-end md:items-center min-h-lvh`} id='wrapper'>
+    <section onClick={handleClose} className={`${isConfirmed ? 'flex' : 'hidden'} inset-0 bg-black bg-opacity-75 fixed justify-center items-end md:items-center min-h-lvh`} id='wrapper'>
       <div className="bg-white shadow-2xl w-full md:w-1/4 rounded-xl py-5 px-8">
         <img src={checked} alt="checked icon" />
         <div className='mt-5'>
@@ -32,8 +41,12 @@ const ConfirmOrder: React.FC<ConfirmOrderState> = ({isConfirmed, setIsConfirmed}
               ))
             }
           </div>
+          <div className='flex justify-between items-center mt-8 mx-3'>
+            <p className='text-xs'>Order Total</p>
+            <p className='text-lg font-bold'>${totalPrice}</p>
+          </div>
         </div>
-        <button onClick={() => setIsConfirmed(false)} className='bg-primary text-white w-full mt-12 p-2 flex justify-center mx-auto rounded-full'>Start New Order</button>
+        <button onClick={() => { reset({}); setIsConfirmed(false)}} className='bg-primary text-white w-full mt-12 p-2 flex justify-center mx-auto rounded-full'>Start New Order</button>
       </div>
     </section>
   )

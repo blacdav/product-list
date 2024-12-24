@@ -1,5 +1,6 @@
 import remove from '../assets/icon-remove-item.svg'
 import carbon_neutral from '../assets/icon-carbon-neutral.svg'
+import empty_cart from '../assets/illustration-empty-cart.svg'
 import { useCart } from '../context/CartContext';
 // import { useState } from 'react';
 
@@ -16,13 +17,13 @@ interface ConfirmOrderState {
 
 const Cart: React.FC<ConfirmOrderState> = ({setIsConfirmed}) => {
   const { state, removeItem } = useCart();
-
   const totalPrice = state.reduce((total, item) => total + ((item.price || 1) * (item.quantity || 1)), 0);
+  const cartLength = state.reduce((total, item) => total + (item.quantity || 1), 0);
 
   return (
     <aside className='col-span-2 md:col-span-1 md:mt-5'>
-      <h1 className='font-bold text-xl text-primary'>Your Cart({state.length})</h1>
-      <section className={`${state ? 'grid' : 'hidden'} mt-5 gap-3`}>
+      <h1 className='font-bold text-xl text-primary'>Your Cart({cartLength})</h1>
+      <section className={`${state.length !== 0 ? 'grid' : 'hidden'} mt-5 gap-3`}>
         <div className='grid gap-5'>
           {
             state.map((item, i) => (
@@ -52,8 +53,12 @@ const Cart: React.FC<ConfirmOrderState> = ({setIsConfirmed}) => {
             <small>This is a carbon-neutral delivery</small>
           </div>
 
-          <button onClick={() => setIsConfirmed(true)} className='bg-primary text-white w-full p-2 flex justify-center mx-auto rounded-full'>Confirm Order</button>
+          <button onClick={() => state.length === 0 ? setIsConfirmed(false) : setIsConfirmed(true)} className='bg-primary text-white w-full p-2 flex justify-center mx-auto rounded-full'>Confirm Order</button>
         </div>
+      </section>
+      <section className={`${state.length !== 0 ? 'hidden' : 'flex'} flex-col justify-center items-center text-center`}>
+        <img src={empty_cart} alt="empty cart" width={200} />
+        <p>Your added item will appear here</p>
       </section>
     </aside>
   )

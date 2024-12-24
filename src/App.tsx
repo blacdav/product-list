@@ -26,7 +26,7 @@ const App: React.FC = () => {
   const [data, setData] = useState<Dessert[]>([]);
   useEffect(() => {
     const getData = async () => {
-      const response = await fetch('http://localhost:5173/data.json');
+      const response = await fetch('https://blacdav-product-list.netlify.app//data.json');
       const data = await response.json();
       setData(data);
     }
@@ -51,7 +51,7 @@ const App: React.FC = () => {
                   </button>
                   <button className={`${ isInCart(dessert.name) ? 'flex' : 'hidden'} w-1/3 h-10 md:w-2/4 px-2 py-1 mx-auto -mt-5 text-white justify-between items-center bg-primary rounded-full`}>
                     <img onClick={() => decreaseQuantity(dessert, dessert.name)} src={decrease} alt="decrease icon" className="border-2 border-white rounded-full w-6 h-6 p-1 flex justify-center items-center" />
-                    <div>{data.find(d => d.name === dessert.name)?.quantity || 0}</div>
+                    <div>{1}</div>
                     <img onClick={() => increaseQuantity(dessert.name)} src={increase} alt="increase icon" className="border-2 border-white rounded-full w-6 h-6 p-1 flex justify-center items-center" />
                   </button>
                 </div>

@@ -4,6 +4,7 @@ interface CartList {
     name?: string,
     price?: number,
     category?: string,
+    // image?: string
     quantity?: number,
 }
 
@@ -19,7 +20,8 @@ interface CartContextType {
     removeItem: (name: string) => void
     increaseQuantity: (name: string) => void,
     decreaseQuantity: (item: CartList, name: string) => void,
-    isInCart: (name: string) => boolean
+    isInCart: (name: string) => boolean,
+    reset: (item: CartList) => void
 }
 
 interface CartNode {
@@ -32,7 +34,8 @@ const ACTIONS = {
     ADD: 'ADD',
     REMOVE: 'REMOVE',
     INCREASE: 'INCREASE',
-    DECREASE: 'DECREASE'
+    DECREASE: 'DECREASE',
+    RESET: 'RESET'
 }
 
 const cartReducer = (state: CartList[], action: Action): CartList[] => {
@@ -52,7 +55,8 @@ const cartReducer = (state: CartList[], action: Action): CartList[] => {
                         : item
                 )
                 .filter(item => (item.quantity || 0) > 0);
-
+        case ACTIONS.RESET:
+            return [];
         default:
             return state;
     }
@@ -100,8 +104,12 @@ export const CartProvider: React.FC<CartNode> = ({ children }) => {
         return state.some(item => item.name === name);
     };
 
+    const reset = (item: CartList) => {
+        dispatch({ type: ACTIONS.RESET, payload: item });
+    }
+
     return (
-        <CartContext.Provider value={{ state, addItem, removeItem, increaseQuantity, decreaseQuantity, isInCart }}>
+        <CartContext.Provider value={{ state, addItem, removeItem, increaseQuantity, decreaseQuantity, isInCart, reset }}>
             { children }
         </CartContext.Provider>
     )
