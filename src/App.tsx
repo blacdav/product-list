@@ -24,6 +24,7 @@ const App: React.FC = () => {
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const { isInCart, addItem, increaseQuantity, decreaseQuantity } = useCart()
   const [data, setData] = useState<Dessert[]>([]);
+  
   useEffect(() => {
     const getData = async () => {
       const response = await fetch('https://blacdav-product-list.netlify.app//data.json');
