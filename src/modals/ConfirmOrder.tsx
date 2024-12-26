@@ -10,11 +10,11 @@ const ConfirmOrder: React.FC<ConfirmOrderState> = ({isConfirmed, setIsConfirmed}
   const { state, reset } = useCart();
   const totalPrice = state.reduce((total, item) => total + ((item.price || 1) * (item.quantity || 1)), 0);
 
-  const handleClose = () => {
-    // const elementId = document.getElementById('wrapper');
-    // if(elementId) {
-    //   setIsConfirmed(false);
-    // }
+  const handleClose = (e: React.MouseEvent<HTMLElement>) => {
+    const target = e.target as HTMLElement;
+    if(target.id === 'wrapper') {
+      setIsConfirmed(false);
+    }
   }
 
   return (
