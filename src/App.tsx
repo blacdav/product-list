@@ -20,7 +20,7 @@ const App: React.FC = () => {
             {data.map((dessert, index) => (
               <div key={index}>
                 <div className="grid">
-                  <img src={dessert.image.desktop} alt="item" className={`${ isInCart(dessert.name) ? 'border-2' : ''} h-56 md:h-full w-full rounded-md border-primary`} />
+                  <img src={dessert.image.desktop} alt={dessert.image.desktop} className={`${ isInCart(dessert.name) ? 'border-2' : ''} h-56 md:h-full w-full rounded-md border-primary`} />
 
                   <button onClick={() => addItem(dessert)} className={`${ isInCart(dessert.name) ? 'hidden' : 'flex'} w-2/5 h-10 md:w-2/4 px-2 py-1 mx-auto -mt-5 bg-white justify-center items-center gap-2 border border-black rounded-full`}>
                     <img src={cart_icon} alt="cart icon" />
