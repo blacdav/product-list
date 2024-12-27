@@ -1,5 +1,5 @@
 // import React from 'react'
-import checked from '../assets/icon-order-confirmed.svg'
+import checked from '/assets/icon-order-confirmed.svg'
 import { useCart } from '../context/CartContext';
 interface ConfirmOrderState {
   isConfirmed: boolean,

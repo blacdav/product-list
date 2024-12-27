@@ -1,6 +1,6 @@
-import remove from '../assets/icon-remove-item.svg'
-import carbon_neutral from '../assets/icon-carbon-neutral.svg'
-import empty_cart from '../assets/illustration-empty-cart.svg'
+import remove from '/assets/icon-remove-item.svg'
+import carbon_neutral from '/assets/icon-carbon-neutral.svg'
+import empty_cart from '/assets/illustration-empty-cart.svg'
 import { useCart } from '../context/CartContext';
 // import { useState } from 'react';
 

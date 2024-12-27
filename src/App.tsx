@@ -1,15 +1,41 @@
-import { useState } from "react"
-import cart_icon from './assets/icon-add-to-cart.svg'
-import decrease from './assets/icon-decrement-quantity.svg'
-import increase from './assets/icon-increment-quantity.svg'
+import { useEffect, useState } from "react"
+import cart_icon from '/assets/icon-add-to-cart.svg'
+import decrease from '/assets/icon-decrement-quantity.svg'
+import increase from '/assets/icon-increment-quantity.svg'
 import Cart from "./components/Cart";
 import { useCart } from "./context/CartContext";
 import ConfirmOrder from "./modals/ConfirmOrder";
-import data from "../public/data.json"
+// import data from "../data.json"
+
+interface CartImage {
+  thumbnail?: string,
+  desktop?: string,
+  tablet?: string,
+  mobile?: string,
+}
+
+interface CartList {
+  name: string,
+  price: number,
+  category: string,
+  image: CartImage,
+  quantity: number,
+}
 
 const App: React.FC = () => {
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const { isInCart, addItem, increaseQuantity, decreaseQuantity } = useCart()
+  const [data, setData] = useState<CartList[]>([])
+
+  useEffect(() => {
+    const getData = async() => {
+      const res = await fetch('/data.json');
+      const data = await res.json();
+      setData(data);
+    }
+
+    getData();
+  }, [])
 
   return (
     <>
@@ -17,7 +43,7 @@ const App: React.FC = () => {
         <section className="col-span-2">
           <h1 className='font-bold text-5xl'>Desserts</h1>
           <div className="mt-5 grid md:grid-cols-3 gap-y-6 gap-x-4">
-            {data.map((dessert, index) => (
+            {data.map((dessert, index: number) => (
               <div key={index}>
                 <div className="grid">
                   <img src={dessert.image.desktop} alt={dessert.image.desktop} className={`${ isInCart(dessert.name) ? 'border-2' : ''} h-56 md:h-full w-full rounded-md border-primary`} />
