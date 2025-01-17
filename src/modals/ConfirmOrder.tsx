@@ -19,7 +19,7 @@ const ConfirmOrder: React.FC<ConfirmOrderState> = ({isConfirmed, setIsConfirmed}
 
   return (
     <section onClick={handleClose} className={`${isConfirmed ? 'flex' : 'hidden'} inset-0 bg-black bg-opacity-75 fixed justify-center items-end md:items-center min-h-lvh`} id='wrapper'>
-      <div className="bg-white shadow-2xl w-full md:w-1/4 rounded-xl py-5 px-8">
+      <div className="bg-white shadow-2xl w-full md:w-1/2 rounded-xl py-5 px-8">
         <img src={checked} alt="checked icon" />
         <div className='mt-5'>
           <h1 className='text-3xl font-bold'>Order Confirmed</h1>

@@ -17,11 +17,11 @@ interface ConfirmOrderState {
 
 const Cart: React.FC<ConfirmOrderState> = ({setIsConfirmed}) => {
   const { state, removeItem } = useCart();
-  const totalPrice = state.reduce((total, item) => total + ((item.price || 1) * (item.quantity || 1)), 0);
-  const cartLength = state.reduce((total, item) => total + (item.quantity || 1), 0);
+  const totalPrice = state.reduce((total, item) => total + ((item.price!) * (item.quantity!)), 0);
+  const cartLength = state.reduce((total, item) => total + (item.quantity!), 0);
 
   return (
-    <aside className='col-span-2 md:col-span-1 md:mt-5'>
+    <aside className='col-span-4 md:col-span-4 lg:col-span-1 md:mt-5'>
       <h1 className='font-bold text-xl text-primary'>Your Cart({cartLength})</h1>
       <section className={`${state.length !== 0 ? 'grid' : 'hidden'} mt-5 gap-3`}>
         <div className='grid gap-5'>
